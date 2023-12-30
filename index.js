@@ -13,7 +13,7 @@ const cors = require('cors');
 app.use(cors());
 
 // 사용자 추가
-app.post('/users', (req, res) => {
+app.post('/users/add', (req, res) => {
     const { name, generation } = req.body;
     connection.query('INSERT INTO UserInfo (name, generation) VALUES (?, ?)',
         [name, generation], (err) => {
@@ -55,7 +55,7 @@ app.get('/users/id', (req, res) => {
 
 
 // 메시지 추가
-app.post('/messages', (req, res) => {
+app.post('/messages/add', (req, res) => {
     const { user_id, message, password } = req.body;
     connection.query('INSERT INTO UserMessages (user_id, message, password) VALUES (?, ?, ?)',
         [user_id, message, password], (err) => {
@@ -68,7 +68,7 @@ app.post('/messages', (req, res) => {
 
 
 // 메시지 삭제
-app.delete('/messages', (req, res) => {
+app.delete('/messages/delete', (req, res) => {
     const { user_id, message, password } = req.body;
     connection.query(
         'SELECT password FROM UserMessages WHERE user_id = ? AND message = ?',
@@ -102,7 +102,7 @@ app.delete('/messages', (req, res) => {
 });
 
 //메시지 수정
-app.put('/messages', (req, res) => {
+app.put('/messages/adjust', (req, res) => {
     const { user_id, oldMessage, newMessage, password } = req.body;
     connection.query(
         'SELECT password FROM UserMessages WHERE user_id = ? AND message = ?',
