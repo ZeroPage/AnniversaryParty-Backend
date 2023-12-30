@@ -135,15 +135,28 @@ app.put('/messages', (req, res) => {
     );
 });
 
-// 전체 메시지 조회
 app.get('/messages', (req, res) => {
-    connection.query('SELECT * FROM UserMessages', (err, results) => {
+    const query = `
+        SELECT 
+            UserMessages.user_id,
+            UserInfo.name, 
+            UserInfo.generation AS number, 
+            UserMessages.message,
+            UserMessages.password
+        FROM 
+            UserMessages
+        INNER JOIN 
+            UserInfo ON UserMessages.user_id = UserInfo.id
+    `;
+
+    connection.query(query, (err, results) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
         res.json(results);
     });
 });
+
 
 
 // 활성화
