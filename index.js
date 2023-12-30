@@ -15,14 +15,24 @@ app.use(cors());
 // 사용자 추가
 app.post('/users/add', (req, res) => {
     const { name, generation } = req.body;
-    connection.query('INSERT INTO UserInfo (name, generation) VALUES (?, ?)',
-        [name, generation], (err) => {
+
+    // 사용자 추가
+    connection.query('INSERT INTO UserInfo (name, generation) VALUES (?, ?)', [name, generation], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+
+        // 새로 생성된 사용자의 ID 가져오기
+        connection.query('SELECT LAST_INSERT_ID() as id', (err, results) => {
             if (err) {
                 return res.status(500).json({ error: err.message });
             }
-            res.json({ message: 'User added successfully' });
+            const id = results[0].id;
+            res.json({ message: 'User added successfully', id: id });
         });
+    });
 });
+
 
 // 사용자 목록과 메시지 개수 조회
 app.get('/users', (req, res) => {
