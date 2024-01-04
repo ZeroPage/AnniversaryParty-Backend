@@ -11,7 +11,10 @@ const port = 3000;
 
 const cors = require('cors');
 app.use(cors());
-
+// api health check
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
 // 사용자 추가
 app.post('/users/add', (req, res) => {
     const { name, generation } = req.body;
